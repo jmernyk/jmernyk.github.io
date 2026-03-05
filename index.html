@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>J. Mernyk — Research & Projects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #f8f6f1;
+      --bg-warm:   #f2ede4;
+      --ink:       #1c1812;
+      --ink-mid:   #4a4438;
+      --ink-light: #8c7f6e;
+      --rule:      #c8bfb0;
+      --accent:    #2d4a7a;
+      --accent-lt: #4a6fa0;
+      --tag-bg:    #e8e2d8;
+      --card-bg:   #ffffff;
+      --shadow:    rgba(28,24,18,0.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ── LAYOUT ── */
+    .site-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      padding: 72px 0 52px;
+      border-bottom: 1px solid var(--rule);
+      animation: fadeIn 0.7s ease both;
+    }
+
+    .header-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 18px;
+    }
+
+    .name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.6rem, 6vw, 4rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .name em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--accent);
+    }
+
+    .title-line {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--ink-mid);
+      margin-bottom: 28px;
+    }
+
+    .bio {
+      font-size: 1rem;
+      color: var(--ink-mid);
+      line-height: 1.8;
+      max-width: 620px;
+    }
+
+    .bio a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-lt);
+    }
+
+    .bio a:hover { border-bottom-color: var(--accent); }
+
+    .header-meta {
+      margin-top: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .meta-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--tag-bg);
+      color: var(--ink-mid);
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      gap: 32px;
+      animation: fadeIn 0.7s 0.1s ease both;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--accent); }
+    nav a.active { color: var(--accent); font-weight: 500; }
+
+    /* ── SECTION ── */
+    section {
+      padding: 56px 0 0;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 28px;
+      line-height: 1.2;
+    }
+
+    /* ── PROJECT CARDS ── */
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--rule);
+      border-radius: 3px;
+      padding: 24px 28px;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      animation: fadeUp 0.6s ease both;
+      position: relative;
+    }
+
+    .project-card:nth-child(1) { animation-delay: 0.15s; }
+    .project-card:nth-child(2) { animation-delay: 0.22s; }
+    .project-card:nth-child(3) { animation-delay: 0.29s; }
+    .project-card:nth-child(4) { animation-delay: 0.36s; }
+
+    .project-card:hover {
+      border-color: var(--accent-lt);
+      box-shadow: 0 2px 16px var(--shadow);
+      transform: translateY(-1px);
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      border-radius: 3px 0 0 3px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .project-card:hover::before { opacity: 1; }
+
+    .project-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .project-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .project-card:hover .project-title { color: var(--accent); }
+
+    .project-arrow {
+      color: var(--rule);
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 3px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .project-card:hover .project-arrow {
+      color: var(--accent);
+      transform: translateX(3px);
+    }
+
+    .project-desc {
+      font-size: 0.95rem;
+      color: var(--ink-mid);
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .project-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: var(--bg-warm);
+      color: var(--ink-light);
+      padding: 2px 8px;
+      border-radius: 2px;
+      border: 1px solid var(--rule);
+    }
+
+    .project-tag.tag-accent {
+      background: #e8edf5;
+      border-color: #b0bdd4;
+      color: var(--accent);
+    }
+
+    /* ── PLACEHOLDER CARD ── */
+    .project-card.placeholder {
+      border-style: dashed;
+      background: transparent;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    .project-card.placeholder .project-title {
+      color: var(--ink-light);
+    }
+
+    /* ── DIVIDER ── */
+    .section-rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 56px 0 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px 0 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 56px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .footer-left {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--ink-light);
+    }
+
+    .footer-right {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rule);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 560px) {
+      .site-wrap { padding: 0 20px; }
+      header { padding: 48px 0 36px; }
+      nav { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-wrap">
+
+    <header>
+      <h1 class="name">Joseph S. Mernyk</h1>
+      <p class="title-line">Ph.D. Candidate, Stanford University</p>
+      <p class="bio">
+        Coming soon.
+      </p>
+      <div class="header-meta">
+        <span class="meta-tag">Applied AI</span>
+        <span class="meta-tag">Social Psychology</span>
+        <span class="meta-tag">Decision Making</span>
+      </div>
+    </header>
+
+    <nav>
+      <a href="#" class="active">Home</a>
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="mailto:">Contact</a>
+    </nav>
+
+    <section id="projects" style="animation: fadeUp 0.6s 0.1s ease both;">
+      <div class="section-label">Current Work</div>
+      <h2 class="section-title">Projects &amp; Tools</h2>
+
+      <div class="project-list">
+
+        <a href="ui-adjudicator-demo.html" class="project-card">
+          <div class="project-header">
+            <div class="project-title">UI Claims Adjudicator Training Simulator</div>
+            <span class="project-arrow">→</span>
+          </div>
+          <p class="project-desc">
+            An AI-powered voice simulation for training unemployment insurance adjudicators. Trainees conduct realistic fact-finding calls with AI personas — claimants and employers — designed to replicate the ambiguity and difficulty of real-world interviews.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-accent">Live Demo</span>
+            <span class="project-tag">Unemployment Insurance</span>
+            <span class="project-tag">Voice AI</span>
+            <span class="project-tag">Adjudicator Training</span>
+          </div>
+        </a>
+
+        <a href="case-files.html" class="project-card">
+          <div class="project-header">
+            <div class="project-title">BEACON Fact-Finding Case Files</div>
+            <span class="project-arrow">→</span>
+          </div>
+          <p class="project-desc">
+            Simulated adjudicator case files presented in the style of a claims management system. Six open fact-finding cases covering Able &amp; Available issues, RESEA non-attendance, and separation disputes — for use alongside the training simulator.
+          </p>
+          <div class="project-tags">
+            <span class="project-tag tag-accent">Training Tool</span>
+            <span class="project-tag">BEACON</span>
+            <span class="project-tag">Case Management</span>
+            <span class="project-tag">Fact-Finding</span>
+          </div>
+        </a>
+
+        <div class="project-card placeholder">
+          <div class="project-header">
+            <div class="project-title">More projects coming soon</div>
+          </div>
+          <p class="project-desc">This space will be updated as new work is published.</p>
+          <div class="project-tags">
+            <span class="project-tag">In Progress</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="section-rule" />
+
+    <section id="about" style="animation: fadeUp 0.6s 0.2s ease both; padding-bottom: 0;">
+      <div class="section-label">Background</div>
+      <h2 class="section-title">About</h2>
+      <p style="color: var(--ink-mid); font-size: 1rem; line-height: 1.85; max-width: 640px;">
+        Coming soon.
+      </p>
+    </section>
+
+    <footer>
+      <div class="footer-left">Joseph S. Mernyk</div>
+      <div class="footer-right">Updated Feb 2026</div>
+    </footer>
+
+  </div>
+</body>
+</html>
