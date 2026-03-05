@@ -1,22 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script>
-  // Firefox WebRTC audio constraint workaround for ElevenLabs widget
-  if (navigator.userAgent.toLowerCase().includes('firefox')) {
-    const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
-    navigator.mediaDevices.getUserMedia = function(constraints) {
-      if (constraints && constraints.audio) {
-        constraints.audio = {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true
-        };
-      }
-      return originalGetUserMedia(constraints);
-    };
-  }
-</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BEACON — Fact Finding Case Files | MD DOL</title>
