@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BEACON — Fact Finding Case Files | MD DOL</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --win-bg: #d4d0c8;
+      --win-dark: #808080;
+      --win-darker: #404040;
+      --win-light: #ffffff;
+      --win-face: #ece9d8;
+      --win-blue: #003399;
+      --win-blue-header: #0a246a;
+      --win-blue-title: #1254a4;
+      --win-link: #0000cc;
+      --win-visited: #551a8b;
+      --win-border-dark: #808080;
+      --win-border-light: #ffffff;
+      --win-border-mid: #b0aca0;
+      --status-green: #006600;
+      --status-red: #cc0000;
+      --status-orange: #cc6600;
+      --status-yellow: #ffcc00;
+      --flag-red: #cc0000;
+    }
+
+    html, body {
+      background: var(--win-bg);
+      font-family: Verdana, Arial, "MS Sans Serif", sans-serif;
+      font-size: 11px;
+      color: #000000;
+      min-height: 100vh;
+    }
+
+    /* ── TOP CHROME BAR ── */
+    .chrome-bar {
+      background: linear-gradient(to bottom, #1c5fa8 0%, #0a246a 100%);
+      padding: 0;
+      display: flex;
+      align-items: stretch;
+      height: 30px;
+      border-bottom: 2px solid #000080;
+    }
+
+    .chrome-logo {
+      background: #003399;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      font-weight: bold;
+      color: #ffffff;
+      border-right: 1px solid rgba(255,255,255,0.2);
+      letter-spacing: 0.05em;
+    }
+
+    .chrome-logo .dot {
+      width: 8px; height: 8px;
+      background: #ffcc00;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .chrome-nav {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .chrome-nav a {
+      color: #cce0ff;
+      text-decoration: none;
+      font-size: 10px;
+      padding: 0 12px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      letter-spacing: 0.03em;
+    }
+
+    .chrome-nav a:hover {
+      background: rgba(255,255,255,0.15);
+      color: #ffffff;
+    }
+
+    .chrome-nav a.active {
+      background: rgba(0,0,0,0.25);
+      color: #ffffff;
+      font-weight: bold;
+    }
+
+    .chrome-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      padding-right: 12px;
+      gap: 14px;
+      font-size: 10px;
+      color: #aac4e8;
+    }
+
+    /* ── MENU BAR ── */
+    .menu-bar {
+      background: var(--win-face);
+      border-bottom: 1px solid var(--win-border-dark);
+      display: flex;
+      align-items: center;
+      padding: 2px 8px;
+      gap: 0;
+    }
+
+    .menu-bar a {
+      color: #000000;
+      text-decoration: none;
+      font-size: 11px;
+      padding: 2px 8px;
+      display: inline-block;
+    }
+
+    .menu-bar a:hover {
+      background: #316ac5;
+      color: #ffffff;
+    }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      background: var(--win-face);
+      border-bottom: 1px solid var(--win-border-mid);
+      padding: 3px 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-btn {
+      background: var(--win-face);
+      border: 1px solid transparent;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-family: Verdana, Arial, sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      color: #000;
+    }
+
+    .toolbar-btn:hover {
+      border: 1px solid var(--win-border-dark);
+      background: linear-gradient(to bottom, #fff 0%, #e0ddd4 100%);
+    }
+
+    .toolbar-sep {
+      width: 1px;
+      height: 18px;
+      background: var(--win-border-dark);
+      margin: 0 2px;
+    }
+
+    .toolbar-label {
+      font-size: 10px;
+      color: var(--win-darker);
+    }
+
+    /* ── ADDRESS BAR ── */
+    .address-bar {
+      background: #ffffff;
+      border: 1px inset var(--win-border-dark);
+      padding: 2px 6px;
+      font-size: 11px;
+      font-family: "Courier New", monospace;
+      color: var(--win-blue);
+      flex: 1;
+      margin-left: 4px;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main-layout {
+      display: flex;
+      min-height: calc(100vh - 100px);
+    }
+
+    /* ── LEFT NAV ── */
+    .left-nav {
+      width: 190px;
+      flex-shrink: 0;
+      background: var(--win-face);
+      border-right: 2px solid;
+      border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
+      padding: 0;
+    }
+
+    .nav-section-header {
+      background: linear-gradient(to bottom, #1254a4 0%, #0a246a 100%);
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 5px 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #000080;
+      margin-top: 0;
+    }
+
+    .nav-section-header + .nav-section-header {
+      margin-top: 8px;
+    }
+
+    .left-nav a {
+      display: block;
+      padding: 4px 10px 4px 18px;
+      text-decoration: none;
+      color: var(--win-link);
+      font-size: 11px;
+      border-bottom: 1px solid #e0ddd4;
+    }
+
+    .left-nav a:hover {
+      background: #316ac5;
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .left-nav a.active {
+      background: #d0d8f0;
+      color: #000080;
+      font-weight: bold;
+    }
+
+    .left-nav a::before {
+      content: '▶ ';
+      font-size: 8px;
+      color: #666;
+    }
+
+    .left-nav a:hover::before,
+    .left-nav a.active::before {
+      color: inherit;
+    }
+
+    /* ── CONTENT AREA ── */
+    .content {
+      flex: 1;
+      padding: 0;
+      overflow-x: auto;
+    }
+
+    /* ── PAGE TITLE BAND ── */
+    .page-title-band {
+      background: linear-gradient(to bottom, #1254a4 0%, #0a246a 100%);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #000066;
+    }
+
+    .page-title-band h1 {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+
+    .page-title-band .breadcrumb {
+      font-size: 10px;
+      color: #aac4e8;
+    }
+
+    .page-title-band .breadcrumb a {
+      color: #cce0ff;
+      text-decoration: none;
+    }
+
+    .page-title-band .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── ALERT BANNER ── */
+    .alert-banner {
+      background: #fffbe6;
+      border-top: 1px solid #cc9900;
+      border-bottom: 1px solid #cc9900;
+      padding: 5px 16px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-banner .alert-icon {
+      color: #cc6600;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    /* ── CONTENT INNER ── */
+    .content-inner {
+      padding: 12px 16px;
+    }
+
+    /* ── SECTION BOX (Windows-style panel) ── */
+    .section-box {
+      margin-bottom: 14px;
+      border: 2px solid;
+      border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
+      background: var(--win-light);
+    }
+
+    .section-box-header {
+      background: linear-gradient(to bottom, #316ac5 0%, #1e52a0 100%);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 4px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      cursor: default;
+    }
+
+    .section-box-header .controls {
+      display: flex;
+      gap: 3px;
+    }
+
+    .win-btn {
+      width: 14px; height: 13px;
+      background: var(--win-face);
+      border: 1px solid;
+      border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
+      font-size: 9px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-family: Verdana, sans-serif;
+      line-height: 1;
+      color: #000;
+    }
+
+    .section-box-body {
+      padding: 10px;
+    }
+
+    /* ── CASE CARD ── */
+    .case-card {
+      margin-bottom: 16px;
+      border: 1px solid var(--win-border-mid);
+      background: var(--win-light);
+    }
+
+    .case-card-header {
+      background: var(--win-face);
+      border-bottom: 1px solid var(--win-border-mid);
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .case-id {
+      font-family: "Courier New", monospace;
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--win-blue);
+      letter-spacing: 0.05em;
+    }
+
+    .case-type-badge {
+      font-size: 10px;
+      padding: 1px 8px;
+      border: 1px solid;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-claimant {
+      background: #ddeeff;
+      border-color: #336699;
+      color: #003366;
+    }
+
+    .badge-employer {
+      background: #eeeedd;
+      border-color: #887722;
+      color: #554400;
+    }
+
+    .case-card-body {
+      padding: 10px;
+    }
+
+    .case-title {
+      font-size: 12px;
+      font-weight: bold;
+      color: #000000;
+      margin-bottom: 6px;
+    }
+
+    /* ── DATA TABLE ── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .data-table td {
+      padding: 3px 6px;
+      border: 1px solid #d0ccc4;
+      vertical-align: top;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background: #f4f2ee;
+    }
+
+    .data-table tr:nth-child(odd) td {
+      background: #ffffff;
+    }
+
+    .data-table .field-label {
+      font-weight: bold;
+      color: #333355;
+      white-space: nowrap;
+      width: 170px;
+      background: #e8e4dc !important;
+    }
+
+    .data-table .field-label-group {
+      font-weight: bold;
+      color: #ffffff;
+      background: #336699 !important;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 6px;
+    }
+
+    /* ── ISSUE FLAG ── */
+    .issue-flag {
+      background: #fff0f0;
+      border: 1px solid #cc0000;
+      border-left: 4px solid #cc0000;
+      padding: 6px 10px;
+      margin-top: 8px;
+      font-size: 11px;
+    }
+
+    .issue-flag .flag-label {
+      font-weight: bold;
+      color: #cc0000;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 3px;
+    }
+
+    .issue-flag p {
+      color: #330000;
+      line-height: 1.5;
+    }
+
+    /* ── STATUS INDICATORS ── */
+    .status-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    .status-pending { background: var(--status-orange); }
+    .status-open { background: var(--status-red); }
+    .status-resolved { background: var(--status-green); }
+
+    /* ── SUMMARY TABLE at top ── */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 14px;
+      font-size: 11px;
+    }
+
+    .summary-table th {
+      background: linear-gradient(to bottom, #4a7cbf 0%, #336699 100%);
+      color: #ffffff;
+      padding: 4px 8px;
+      text-align: left;
+      font-weight: bold;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid #1a4a80;
+    }
+
+    .summary-table td {
+      padding: 4px 8px;
+      border: 1px solid #c8c4bc;
+      vertical-align: middle;
+    }
+
+    .summary-table tr:nth-child(even) td { background: #f0ede6; }
+    .summary-table tr:nth-child(odd) td { background: #fafaf6; }
+
+    .summary-table tr:hover td {
+      background: #dce8f8;
+    }
+
+    .summary-table a {
+      color: var(--win-link);
+      text-decoration: none;
+    }
+
+    .summary-table a:hover {
+      text-decoration: underline;
+    }
+
+    /* ── INSTRUCTION BOX ── */
+    .instruction-box {
+      background: #eef4ff;
+      border: 1px solid #99aacc;
+      border-left: 4px solid #336699;
+      padding: 8px 12px;
+      margin-bottom: 14px;
+      font-size: 11px;
+      line-height: 1.6;
+      color: #001133;
+    }
+
+    .instruction-box strong {
+      color: #003399;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      background: var(--win-face);
+      border-top: 1px solid var(--win-border-dark);
+      padding: 2px 10px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 10px;
+      color: #333333;
+      position: sticky;
+      bottom: 0;
+    }
+
+    .status-bar-section {
+      border-right: 1px solid var(--win-border-dark);
+      padding-right: 12px;
+    }
+
+    /* ── SCROLLABLE CASE AREA ── */
+    .case-scroll-area {
+      max-height: none;
+    }
+
+    /* ── TAB BAR ── */
+    .tab-bar {
+      display: flex;
+      border-bottom: 2px solid var(--win-border-dark);
+      background: var(--win-bg);
+      padding: 4px 12px 0;
+      gap: 2px;
+    }
+
+    .tab {
+      background: var(--win-face);
+      border: 1px solid var(--win-border-dark);
+      border-bottom: none;
+      padding: 3px 14px;
+      font-size: 11px;
+      cursor: pointer;
+      color: #000;
+      position: relative;
+      top: 1px;
+      font-family: Verdana, Arial, sans-serif;
+    }
+
+    .tab.active {
+      background: #ffffff;
+      border-bottom: 2px solid #ffffff;
+      font-weight: bold;
+      z-index: 1;
+    }
+
+    .tab:hover:not(.active) {
+      background: #e0ddd4;
+    }
+
+    /* ── PRINT-STYLE NOTE ── */
+    .system-note {
+      font-size: 10px;
+      color: #666666;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    /* ── COLUMNS ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .two-col { grid-template-columns: 1fr; }
+      .left-nav { display: none; }
+    }
+
+    /* ── BACK LINK NAV ── */
+    .back-nav {
+      padding: 6px 16px;
+      background: var(--win-face);
+      border-bottom: 1px solid var(--win-border-mid);
+      font-size: 11px;
+    }
+
+    .back-nav a {
+      color: var(--win-link);
+      text-decoration: none;
+    }
+
+    .back-nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP CHROME -->
+  <div class="chrome-bar">
+    <div class="chrome-logo">
+      <span class="dot"></span>
+      MDOL BEACON
+    </div>
+    <nav class="chrome-nav">
+      <a href="ui-adjudicator-demo.html">Training Home</a>
+      <a href="case-files.html" class="active">Case Files</a>
+      <a href="#">BEACON Login</a>
+      <a href="#">Help</a>
+    </nav>
+    <div class="chrome-right">
+      <span>SESSION: TRAINING-SIM</span>
+      <span>USER: ADJUDICATOR_TRAINEE</span>
+    </div>
+  </div>
+
+  <!-- MENU BAR -->
+  <div class="menu-bar">
+    <a href="#">File</a>
+    <a href="#">Edit</a>
+    <a href="#">View</a>
+    <a href="#">Claims</a>
+    <a href="#">Reports</a>
+    <a href="#">Admin</a>
+    <a href="#">Help</a>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <button class="toolbar-btn">◀ Back</button>
+    <button class="toolbar-btn">▶ Forward</button>
+    <div class="toolbar-sep"></div>
+    <button class="toolbar-btn">🔄 Refresh</button>
+    <button class="toolbar-btn">🏠 Home</button>
+    <div class="toolbar-sep"></div>
+    <button class="toolbar-btn">🖨 Print</button>
+    <button class="toolbar-btn">💾 Export</button>
+    <div class="toolbar-sep"></div>
+    <span class="toolbar-label">Address:</span>
+    <div class="address-bar">http://beacon.dol.maryland.gov/adjudication/factfinding/cases</div>
+  </div>
+
+  <!-- BACK NAV -->
+  <div class="back-nav">
+    📁 <a href="ui-adjudicator-demo.html">Training Simulator Home</a> &raquo;
+    <a href="case-files.html">Fact-Finding Case Files</a>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="main-layout">
+
+    <!-- LEFT NAV -->
+    <nav class="left-nav">
+      <div class="nav-section-header">Adjudication</div>
+      <a href="#" class="active">Fact Finding</a>
+      <a href="#">My Work Queue</a>
+      <a href="#">Pending Issues</a>
+      <a href="#">Completed Cases</a>
+      <div class="nav-section-header">Claimant</div>
+      <a href="#">Search Claimant</a>
+      <a href="#">Weekly Certs</a>
+      <a href="#">A&amp;A Issues</a>
+      <a href="#">RESEA Records</a>
+      <div class="nav-section-header">Employer</div>
+      <a href="#">Search Employer</a>
+      <a href="#">Separation Disputes</a>
+      <a href="#">Employer Accounts</a>
+      <div class="nav-section-header">Tools</div>
+      <a href="#">FF Questionnaire</a>
+      <a href="#">Notepad</a>
+      <a href="#">Policy Manual</a>
+      <a href="#">Training Materials</a>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- PAGE TITLE -->
+      <div class="page-title-band">
+        <h1>Fact-Finding Case Files — Training Simulation</h1>
+        <div class="breadcrumb">
+          <a href="ui-adjudicator-demo.html">Home</a> &raquo;
+          <a href="#">Adjudication</a> &raquo;
+          Fact Finding
+        </div>
+      </div>
+
+      <!-- ALERT -->
+      <div class="alert-banner">
+        <span class="alert-icon">⚠</span>
+        <strong>TRAINING MODE ACTIVE.</strong>&nbsp; All cases below are simulated. No actions taken in this session will affect live claims. Last updated: 11/21/2024 08:14 AM EST
+      </div>
+
+      <!-- TAB BAR -->
+      <div class="tab-bar">
+        <div class="tab active">Open Cases (6)</div>
+        <div class="tab">My Queue (0)</div>
+        <div class="tab">Closed</div>
+        <div class="tab">Search</div>
+      </div>
+
+      <div class="content-inner">
+
+        <div class="instruction-box">
+          <strong>Instructions:</strong> Review each case file below before initiating your fact-finding call. The information shown reflects what is currently available in BEACON from the claimant's application, weekly certification, or employer submission. Use this to prepare your questions. When ready, return to the <a href="ui-adjudicator-demo.html">Training Simulator</a> to begin your call.
+        </div>
+
+        <!-- SUMMARY TABLE -->
+        <div class="section-box">
+          <div class="section-box-header">
+            Open Fact-Finding Issues — All Cases
+            <div class="controls">
+              <div class="win-btn">_</div>
+              <div class="win-btn">□</div>
+              <div class="win-btn">✕</div>
+            </div>
+          </div>
+          <div class="section-box-body">
+            <table class="summary-table">
+              <thead>
+                <tr>
+                  <th>Claim / Case ID</th>
+                  <th>Name</th>
+                  <th>Issue Type</th>
+                  <th>Party</th>
+                  <th>Date Opened</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="#case-1">MD-2024-447821</a></td>
+                  <td>Marlowe, Kevin</td>
+                  <td>Able &amp; Available — Transportation</td>
+                  <td><span class="case-type-badge badge-claimant">Claimant</span></td>
+                  <td>10/21/2024</td>
+                  <td><span class="status-dot status-open"></span>Open</td>
+                  <td><a href="#case-1">View File</a></td>
+                </tr>
+                <tr>
+                  <td><a href="#case-2">MD-2024-512903</a></td>
+                  <td>Kowalski, Sandra</td>
+                  <td>Able &amp; Available — Medical</td>
+                  <td><span class="case-type-badge badge-claimant">Claimant</span></td>
+                  <td>10/08/2024</td>
+                  <td><span class="status-dot status-open"></span>Open</td>
+                  <td><a href="#case-2">View File</a></td>
+                </tr>
+                <tr>
+                  <td><a href="#case-3">MD-2024-388147</a></td>
+                  <td>Nakamura, Brianna</td>
+                  <td>Able &amp; Available — School</td>
+                  <td><span class="case-type-badge badge-claimant">Claimant</span></td>
+                  <td>11/14/2024</td>
+                  <td><span class="status-dot status-pending"></span>Pending Info</td>
+                  <td><a href="#case-3">View File</a></td>
+                </tr>
+                <tr>
+                  <td><a href="#case-4">MD-2024-603271</a></td>
+                  <td>Bergman, Todd</td>
+                  <td>RESEA Non-Attendance</td>
+                  <td><span class="case-type-badge badge-claimant">Claimant</span></td>
+                  <td>11/20/2024</td>
+                  <td><span class="status-dot status-open"></span>Open</td>
+                  <td><a href="#case-4">View File</a></td>
+                </tr>
+                <tr>
+                  <td><a href="#case-5">SEP-2024-081155</a></td>
+                  <td>Feeney, Robert / Sunburst Packaging</td>
+                  <td>Separation — Alleged Misconduct</td>
+                  <td><span class="case-type-badge badge-employer">Employer</span></td>
+                  <td>11/18/2024</td>
+                  <td><span class="status-dot status-open"></span>Open</td>
+                  <td><a href="#case-5">View File</a></td>
+                </tr>
+                <tr>
+                  <td><a href="#case-6">SEP-2024-093402</a></td>
+                  <td>Vossen, Amy / Gallagher's Diner</td>
+                  <td>Separation — Voluntary Quit</td>
+                  <td><span class="case-type-badge badge-employer">Employer</span></td>
+                  <td>11/01/2024</td>
+                  <td><span class="status-dot status-open"></span>Open</td>
+                  <td><a href="#case-6">View File</a></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="system-note">Showing 6 of 6 records. Generated 11/21/2024 08:14:02 AM. BEACON v4.2.1</p>
+          </div>
+        </div>
+
+        <!-- ═══ CASE 1 ═══ -->
+        <div class="case-card" id="case-1">
+          <div class="case-card-header">
+            <span class="case-id">MD-2024-447821</span>
+            <span class="case-type-badge badge-claimant">Claimant — Able &amp; Available</span>
+          </div>
+          <div class="case-card-body">
+            <div class="case-title">Issue Type: Able &amp; Available — Transportation</div>
+            <div class="two-col">
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Claimant Information</td></tr>
+                <tr><td class="field-label">Claim ID</td><td>MD-2024-447821</td></tr>
+                <tr><td class="field-label">Last Name</td><td>Marlowe</td></tr>
+                <tr><td class="field-label">First Name</td><td>Kevin</td></tr>
+                <tr><td class="field-label">Address</td><td>1847 Westport Ave, Baltimore, MD 21230</td></tr>
+                <tr><td class="field-label">Phone</td><td>(410) 555-0193</td></tr>
+                <tr><td class="field-label">Email</td><td>k.marlowe.bmore@gmail.com</td></tr>
+              </table>
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Employment Record</td></tr>
+                <tr><td class="field-label">Employer Name</td><td>Chesapeake Logistics LLC</td></tr>
+                <tr><td class="field-label">Employer Address</td><td>3200 Port Covington Dr, Baltimore, MD 21230</td></tr>
+                <tr><td class="field-label">Employer Phone</td><td>(410) 555-0847</td></tr>
+                <tr><td class="field-label">First Day of Work</td><td>03/03/2022</td></tr>
+                <tr><td class="field-label">Last Day of Work</td><td>10/14/2024</td></tr>
+                <tr><td class="field-label">Reason for Sep.</td><td>Laid off — position eliminated</td></tr>
+              </table>
+            </div>
+            <table class="data-table" style="margin-bottom:8px;">
+              <tr><td colspan="2" class="field-label-group">Weekly Certification Response</td></tr>
+              <tr><td class="field-label" style="width:200px;">Able &amp; Available Response</td><td><strong>NO</strong> — Claimant indicated they were NOT able and available to accept work for the certification week.</td></tr>
+              <tr><td class="field-label">Reason Provided</td><td><em>(none provided)</em></td></tr>
+              <tr><td class="field-label">Week Ending</td><td>10/19/2024</td></tr>
+            </table>
+            <div class="issue-flag">
+              <div class="flag-label">⚑ Issue Flagged — Adjudicator Action Required</div>
+              <p>Claimant answered NO to able &amp; available question on weekly certification. No reason specified. Adjudicator must contact claimant to determine the nature of the limitation and assess eligibility for that benefit week.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CASE 2 ═══ -->
+        <div class="case-card" id="case-2">
+          <div class="case-card-header">
+            <span class="case-id">MD-2024-512903</span>
+            <span class="case-type-badge badge-claimant">Claimant — Able &amp; Available</span>
+          </div>
+          <div class="case-card-body">
+            <div class="case-title">Issue Type: Able &amp; Available — Medical Condition</div>
+            <div class="two-col">
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Claimant Information</td></tr>
+                <tr><td class="field-label">Claim ID</td><td>MD-2024-512903</td></tr>
+                <tr><td class="field-label">Last Name</td><td>Kowalski</td></tr>
+                <tr><td class="field-label">First Name</td><td>Sandra</td></tr>
+                <tr><td class="field-label">Address</td><td>412 Harborview Ct, Annapolis, MD 21401</td></tr>
+                <tr><td class="field-label">Phone</td><td>(443) 555-0276</td></tr>
+                <tr><td class="field-label">Email</td><td>sandra.kowalski55@hotmail.com</td></tr>
+              </table>
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Employment Record</td></tr>
+                <tr><td class="field-label">Employer Name</td><td>MedBridge Administrative Services</td></tr>
+                <tr><td class="field-label">Employer Address</td><td>800 Research Dr Ste 220, Annapolis, MD 21401</td></tr>
+                <tr><td class="field-label">Employer Phone</td><td>(443) 555-0810</td></tr>
+                <tr><td class="field-label">First Day of Work</td><td>06/12/2018</td></tr>
+                <tr><td class="field-label">Last Day of Work</td><td>09/30/2024</td></tr>
+                <tr><td class="field-label">Reason for Sep.</td><td>Medical leave — employer unable to hold position</td></tr>
+              </table>
+            </div>
+            <table class="data-table" style="margin-bottom:8px;">
+              <tr><td colspan="2" class="field-label-group">Application Response</td></tr>
+              <tr><td class="field-label" style="width:200px;">Able &amp; Available Response</td><td><strong>NO</strong> — Claimant stated they are NOT able and available due to a medical condition.</td></tr>
+              <tr><td class="field-label">Reason Provided</td><td>Medical condition (no further detail provided on application)</td></tr>
+            </table>
+            <div class="issue-flag">
+              <div class="flag-label">⚑ Issue Flagged — Adjudicator Action Required</div>
+              <p>Claimant self-reported a medical condition preventing work. Nature of condition, duration, and whether the condition is consistent with the claimant's occupation have not been established. Adjudicator must determine if limitation genuinely prevents work in the claimant's field.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CASE 3 ═══ -->
+        <div class="case-card" id="case-3">
+          <div class="case-card-header">
+            <span class="case-id">MD-2024-388147</span>
+            <span class="case-type-badge badge-claimant">Claimant — Able &amp; Available (School)</span>
+          </div>
+          <div class="case-card-body">
+            <div class="case-title">Issue Type: Able &amp; Available — School Attendance</div>
+            <div class="two-col">
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Claimant Information</td></tr>
+                <tr><td class="field-label">Claim ID</td><td>MD-2024-388147</td></tr>
+                <tr><td class="field-label">Last Name</td><td>Nakamura</td></tr>
+                <tr><td class="field-label">First Name</td><td>Brianna</td></tr>
+                <tr><td class="field-label">Address</td><td>2209 Ferndale Ave, Glen Burnie, MD 21061</td></tr>
+                <tr><td class="field-label">Phone</td><td>(410) 555-0394</td></tr>
+                <tr><td class="field-label">Email</td><td>brianna.nakamura@gmail.com</td></tr>
+              </table>
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Employment Record</td></tr>
+                <tr><td class="field-label">Employer Name</td><td>Vantage Call Solutions</td></tr>
+                <tr><td class="field-label">Employer Address</td><td>1100 Cromwell Bridge Rd, Towson, MD 21286</td></tr>
+                <tr><td class="field-label">Employer Phone</td><td>(443) 555-0521</td></tr>
+                <tr><td class="field-label">First Day of Work</td><td>02/01/2022</td></tr>
+                <tr><td class="field-label">Last Day of Work</td><td>11/08/2024</td></tr>
+                <tr><td class="field-label">Reason for Sep.</td><td>Laid off — call center closed department</td></tr>
+              </table>
+            </div>
+            <table class="data-table" style="margin-bottom:8px;">
+              <tr><td colspan="2" class="field-label-group">Application Response</td></tr>
+              <tr><td class="field-label" style="width:200px;">School Attendance</td><td><strong>YES</strong> — Claimant indicated they are currently attending school.</td></tr>
+              <tr><td class="field-label">Institution</td><td><em>(not provided)</em></td></tr>
+              <tr><td class="field-label">Schedule / Format</td><td><em>(not provided)</em></td></tr>
+            </table>
+            <div class="issue-flag">
+              <div class="flag-label">⚑ Issue Flagged — Adjudicator Action Required</div>
+              <p>Claimant disclosed school enrollment on initial application. Able &amp; available status is unresolved. Adjudicator must determine schedule, format (online vs. in-person), whether claimant could accept full-time work if offered, and whether classes could be adjusted if necessary.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CASE 4 ═══ -->
+        <div class="case-card" id="case-4">
+          <div class="case-card-header">
+            <span class="case-id">MD-2024-603271</span>
+            <span class="case-type-badge badge-claimant">Claimant — RESEA</span>
+          </div>
+          <div class="case-card-body">
+            <div class="case-title">Issue Type: RESEA Non-Attendance</div>
+            <div class="two-col">
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Claimant Information</td></tr>
+                <tr><td class="field-label">Claim ID</td><td>MD-2024-603271</td></tr>
+                <tr><td class="field-label">Last Name</td><td>Bergman</td></tr>
+                <tr><td class="field-label">First Name</td><td>Todd</td></tr>
+                <tr><td class="field-label">Address</td><td>3301 Loch Raven Blvd Apt 4B, Baltimore, MD 21218</td></tr>
+                <tr><td class="field-label">Phone</td><td>(443) 555-0718</td></tr>
+                <tr><td class="field-label">Email</td><td>todd.bergman.hvac@gmail.com</td></tr>
+              </table>
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Employment Record</td></tr>
+                <tr><td class="field-label">Employer Name</td><td>Cool Comfort Systems Inc.</td></tr>
+                <tr><td class="field-label">Employer Address</td><td>4501 Erdman Ave, Baltimore, MD 21205</td></tr>
+                <tr><td class="field-label">Employer Phone</td><td>(410) 555-0633</td></tr>
+                <tr><td class="field-label">First Day of Work</td><td>05/15/2019</td></tr>
+                <tr><td class="field-label">Last Day of Work</td><td>10/31/2024</td></tr>
+                <tr><td class="field-label">Reason for Sep.</td><td>Seasonal layoff</td></tr>
+              </table>
+            </div>
+            <table class="data-table" style="margin-bottom:8px;">
+              <tr><td colspan="2" class="field-label-group">RESEA Workshop Record</td></tr>
+              <tr><td class="field-label" style="width:200px;">Workshop Scheduled</td><td>11/19/2024, 10:00 AM — Baltimore American Job Center</td></tr>
+              <tr><td class="field-label">Attendance Status</td><td><strong style="color:#cc0000;">NO-SHOW</strong> — Claimant did not attend. No advance notice received by facilitator.</td></tr>
+              <tr><td class="field-label">Notification Sent</td><td>11/04/2024 (15 days prior — within required window)</td></tr>
+              <tr><td class="field-label">Prior Missed Workshops</td><td>None on record</td></tr>
+              <tr><td class="field-label">Certifying That Week</td><td>YES — Claimant submitted weekly certification for benefit week ending 11/23/2024</td></tr>
+            </table>
+            <div class="issue-flag">
+              <div class="flag-label">⚑ Issue Flagged — Adjudicator Action Required</div>
+              <p>Claimant failed to attend mandatory RESEA workshop. Claimant is actively claiming benefits for that week. Adjudicator must determine reason for non-attendance, assess whether good cause exists, determine A&amp;A status for that week, and instruct claimant to reschedule within 48 hours if applicable.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CASE 5 ═══ -->
+        <div class="case-card" id="case-5">
+          <div class="case-card-header">
+            <span class="case-id">SEP-2024-081155</span>
+            <span class="case-type-badge badge-employer">Employer — Separation Dispute</span>
+          </div>
+          <div class="case-card-body">
+            <div class="case-title">Issue Type: Separation / Employer-Initiated — Alleged Misconduct</div>
+            <div class="two-col">
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Claimant Information</td></tr>
+                <tr><td class="field-label">Claimant Name</td><td>Feeney, Robert</td></tr>
+                <tr><td class="field-label">Claim ID</td><td>SEP-2024-081155</td></tr>
+                <tr><td class="field-label">Last Day of Work</td><td>11/15/2024</td></tr>
+                <tr><td class="field-label">Claimant's Account</td><td>Disputes that proper progressive discipline was followed prior to termination</td></tr>
+              </table>
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Employer Information</td></tr>
+                <tr><td class="field-label">Employer Name</td><td>Sunburst Packaging Solutions</td></tr>
+                <tr><td class="field-label">Address</td><td>6600 Quad Ave, Baltimore, MD 21237</td></tr>
+                <tr><td class="field-label">Phone</td><td>(410) 555-0922</td></tr>
+                <tr><td class="field-label">EIN</td><td>52-1847392</td></tr>
+                <tr><td class="field-label">Employer Contact</td><td>HR Department</td></tr>
+              </table>
+            </div>
+            <table class="data-table" style="margin-bottom:8px;">
+              <tr><td colspan="2" class="field-label-group">Separation Details</td></tr>
+              <tr><td class="field-label" style="width:200px;">Separation Type</td><td>Employer-initiated termination</td></tr>
+              <tr><td class="field-label">Employer-Stated Reason</td><td>Excessive tardiness — three incidents within a 60-day period</td></tr>
+              <tr><td class="field-label">Claimant-Stated Reason</td><td>Terminated without proper warning process being followed</td></tr>
+              <tr><td class="field-label">Documentation Submitted</td><td><em>None submitted to DOL. Employer states documentation exists on file.</em></td></tr>
+            </table>
+            <div class="issue-flag">
+              <div class="flag-label">⚑ Issue Flagged — Conflicting Separation Accounts</div>
+              <p>Employer and claimant provide conflicting accounts. Adjudicator must contact employer to obtain specifics of the disciplinary process, verify whether each step was documented and communicated to the employee, and determine whether the termination meets the legal standard for disqualifying misconduct.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CASE 6 ═══ -->
+        <div class="case-card" id="case-6">
+          <div class="case-card-header">
+            <span class="case-id">SEP-2024-093402</span>
+            <span class="case-type-badge badge-employer">Employer — Voluntary Quit Dispute</span>
+          </div>
+          <div class="case-card-body">
+            <div class="case-title">Issue Type: Separation / Claimant-Initiated — Alleged Good Cause</div>
+            <div class="two-col">
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Claimant Information</td></tr>
+                <tr><td class="field-label">Claimant Name</td><td>Vossen, Amy</td></tr>
+                <tr><td class="field-label">Claim ID</td><td>SEP-2024-093402</td></tr>
+                <tr><td class="field-label">Last Day of Work</td><td>Approx. 10/18/2024 (to confirm)</td></tr>
+                <tr><td class="field-label">Claimant's Account</td><td>Quit due to workplace harassment that was reported to management but not addressed</td></tr>
+              </table>
+              <table class="data-table">
+                <tr><td colspan="2" class="field-label-group">Employer Information</td></tr>
+                <tr><td class="field-label">Employer Name</td><td>Gallagher's Family Diner</td></tr>
+                <tr><td class="field-label">Address</td><td>8820 Georgia Ave, Silver Spring, MD 20910</td></tr>
+                <tr><td class="field-label">Phone</td><td>(301) 555-0447</td></tr>
+                <tr><td class="field-label">EIN</td><td>52-3049817</td></tr>
+                <tr><td class="field-label">Employer Contact</td><td>Owner/Manager</td></tr>
+              </table>
+            </div>
+            <table class="data-table" style="margin-bottom:8px;">
+              <tr><td colspan="2" class="field-label-group">Separation Details</td></tr>
+              <tr><td class="field-label" style="width:200px;">Separation Type</td><td>Voluntary quit (claimant-initiated)</td></tr>
+              <tr><td class="field-label">Employer-Stated Reason</td><td>Employee quit, citing conflict with a co-worker; gave minimal notice</td></tr>
+              <tr><td class="field-label">Claimant-Stated Reason</td><td>Quit due to unaddressed workplace harassment; reported to manager and shift supervisor twice</td></tr>
+              <tr><td class="field-label">Documentation Submitted</td><td><em>None on file. No written complaints, disciplinary records, or schedules provided.</em></td></tr>
+            </table>
+            <div class="issue-flag">
+              <div class="flag-label">⚑ Issue Flagged — Voluntary Quit / Good Cause Review Required</div>
+              <p>Claimant quit voluntarily but alleges good cause. For benefits to be awarded, claimant must have had good cause to leave AND must have taken reasonable steps to resolve the issue before quitting. Adjudicator must determine: were complaints made, was anything done in response, and did the claimant have reasonable alternatives to separation.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="system-note" style="text-align:center; margin-top: 8px;">
+          BEACON Training System — Records are simulated and do not reflect real claimants or employers. &nbsp;|&nbsp; Maryland Department of Labor, Division of Unemployment Insurance &nbsp;|&nbsp; System v4.2.1
+        </p>
+
+      </div><!-- /content-inner -->
+    </div><!-- /content -->
+  </div><!-- /main-layout -->
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar-section">BEACON v4.2.1</span>
+    <span class="status-bar-section">Unit: Central Adjudication — Baltimore</span>
+    <span class="status-bar-section">Session: TRAINING-SIM</span>
+    <span class="status-bar-section"><span class="status-dot status-open"></span> 6 Open Items</span>
+    <span>Last Sync: 11/21/2024 08:14 AM EST</span>
+  </div>
+
+</body>
+</html>
