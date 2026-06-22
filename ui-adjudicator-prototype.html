@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claims Adjudication System — Case File [PROTOTYPE]</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gov-bg: #d4d0c8;
+      --gov-face: #ece9d8;
+      --gov-blue: #2a4d7a;
+      --gov-blue-dark: #1a3a5f;
+      --gov-link: #0000cc;
+      --border-dark: #808080;
+      --border-light: #ffffff;
+      --border-mid: #b0aca0;
+      --flag-red: #aa0000;
+      --status-orange: #cc6600;
+    }
+
+    html, body {
+      background: var(--gov-bg);
+      font-family: Verdana, Arial, "MS Sans Serif", sans-serif;
+      font-size: 11px;
+      color: #000;
+      min-height: 100vh;
+    }
+
+    /* PROTOTYPE BANNER */
+    .proto-banner {
+      background: repeating-linear-gradient(
+        45deg,
+        #ffcc00,
+        #ffcc00 14px,
+        #1a1a1a 14px,
+        #1a1a1a 28px
+      );
+      padding: 4px;
+    }
+
+    .proto-banner-inner {
+      background: #fff8dc;
+      border: 1px solid #997700;
+      padding: 6px 16px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: #663300;
+      letter-spacing: 0.05em;
+    }
+
+    /* TOP BAR */
+    .top-bar {
+      background: linear-gradient(to bottom, #3a6098 0%, #1f3a5f 100%);
+      padding: 0;
+      display: flex;
+      align-items: stretch;
+      height: 32px;
+      border-bottom: 2px solid #15293f;
+    }
+
+    .top-logo {
+      background: #1f3a5f;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      color: #fff;
+      border-right: 1px solid rgba(255,255,255,0.15);
+      letter-spacing: 0.04em;
+    }
+
+    .top-logo .seal {
+      width: 14px; height: 14px;
+      background: #c0c0c0;
+      border: 1px solid #888;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .top-nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .top-nav a {
+      color: #cfe0f5;
+      text-decoration: none;
+      font-size: 10px;
+      padding: 0 14px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .top-nav a:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .top-nav a.active { background: rgba(0,0,0,0.22); color: #fff; font-weight: bold; }
+
+    /* MENU BAR */
+    .menu-bar {
+      background: var(--gov-face);
+      border-bottom: 1px solid var(--border-dark);
+      display: flex;
+      padding: 2px 8px;
+    }
+
+    .menu-bar a {
+      color: #000;
+      text-decoration: none;
+      font-size: 11px;
+      padding: 2px 8px;
+    }
+
+    .menu-bar a:hover { background: #316ac5; color: #fff; }
+
+    /* ADDRESS / TOOLBAR */
+    .toolbar {
+      background: var(--gov-face);
+      border-bottom: 1px solid var(--border-mid);
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .address-label { font-size: 10px; color: #444; }
+
+    .address-bar {
+      background: #fff;
+      border: 1px inset var(--border-dark);
+      padding: 2px 6px;
+      font-size: 11px;
+      font-family: "Courier New", monospace;
+      color: var(--gov-blue);
+      flex: 1;
+    }
+
+    /* PAGE TITLE BAND */
+    .title-band {
+      background: linear-gradient(to bottom, #3a6098 0%, #1f3a5f 100%);
+      padding: 9px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #15293f;
+    }
+
+    .title-band h1 {
+      font-family: Arial, sans-serif;
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .title-band .case-status {
+      font-size: 10px;
+      color: #ffd9b0;
+      font-weight: bold;
+    }
+
+    /* MAIN */
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* CASE PANEL */
+    .panel {
+      border: 2px solid;
+      border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+      background: #fff;
+      margin-bottom: 16px;
+    }
+
+    .panel-header {
+      background: linear-gradient(to bottom, #4a72ad 0%, #2f5488 100%);
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 5px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-body { padding: 12px; }
+
+    /* DATA TABLE */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .data-table td {
+      padding: 6px 10px;
+      border: 1px solid #d0ccc4;
+      vertical-align: top;
+    }
+
+    .data-table tr:nth-child(even) td { background: #f4f2ee; }
+    .data-table tr:nth-child(odd) td { background: #fff; }
+
+    .data-table .label {
+      font-weight: bold;
+      color: #2a3f5f;
+      width: 200px;
+      background: #e6e2da !important;
+      white-space: nowrap;
+    }
+
+    .data-table .value-lg {
+      font-size: 14px;
+      font-weight: bold;
+      color: #1a1a1a;
+    }
+
+    /* CALL ACTION BOX */
+    .call-box {
+      border: 2px solid;
+      border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+      background: var(--gov-face);
+      margin-bottom: 16px;
+      padding: 0;
+    }
+
+    .call-box-header {
+      background: linear-gradient(to bottom, #4a8a4a 0%, #2f662f 100%);
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 5px 10px;
+    }
+
+    .call-box-body {
+      padding: 16px;
+      text-align: center;
+    }
+
+    .call-instructions {
+      font-size: 11px;
+      color: #333;
+      margin-bottom: 14px;
+      line-height: 1.6;
+    }
+
+    .employer-note {
+      display: inline-block;
+      background: #e8f0e8;
+      border: 1px solid #889988;
+      color: #2f662f;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 3px 10px;
+      margin-bottom: 14px;
+      border-radius: 1px;
+    }
+
+
+
+    /* NOTEPAD */
+    .notepad-box {
+      border: 2px solid;
+      border-color: var(--border-light) var(--border-dark) var(--border-dark) var(--border-light);
+      background: var(--gov-face);
+      margin-bottom: 16px;
+    }
+
+    .notepad-header {
+      background: linear-gradient(to bottom, #998844 0%, #776622 100%);
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 5px 10px;
+    }
+
+    .notepad-body { padding: 12px; }
+
+    .notepad-area {
+      width: 100%;
+      min-height: 140px;
+      border: 1px inset var(--border-dark);
+      background: #fffef8;
+      font-family: "Courier New", monospace;
+      font-size: 12px;
+      padding: 10px;
+      resize: vertical;
+      line-height: 1.6;
+      background-image: repeating-linear-gradient(
+        transparent,
+        transparent 21px,
+        #e0ddd0 21px,
+        #e0ddd0 22px
+      );
+    }
+
+    .notepad-hint {
+      font-size: 10px;
+      color: #776622;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    /* STATUS BAR */
+    .status-bar {
+      background: var(--gov-face);
+      border-top: 1px solid var(--border-dark);
+      padding: 3px 12px;
+      display: flex;
+      gap: 18px;
+      font-size: 10px;
+      color: #333;
+    }
+
+    .status-bar span { border-right: 1px solid var(--border-dark); padding-right: 12px; }
+    .status-bar span:last-child { border-right: none; }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--status-orange);
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 10px;
+      color: #666;
+      margin: 12px 0;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PROTOTYPE BANNER -->
+  <div class="proto-banner">
+    <div class="proto-banner-inner">
+      ⚠ PROTOTYPE ONLY — DEMONSTRATION SYSTEM — NOT FOR OFFICIAL USE ⚠
+    </div>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-logo">
+      <span class="seal"></span>
+      CLAIMS ADJUDICATION SYSTEM
+    </div>
+    <nav class="top-nav">
+      <a href="#">Home</a>
+      <a href="#" class="active">Case File</a>
+      <a href="#">Login</a>
+      <a href="#">Help</a>
+    </nav>
+  </div>
+
+  <!-- MENU BAR -->
+  <div class="menu-bar">
+    <a href="#">File</a>
+    <a href="#">Edit</a>
+    <a href="#">View</a>
+    <a href="#">Claims</a>
+    <a href="#">Tools</a>
+    <a href="#">Help</a>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <span class="address-label">Address:</span>
+    <div class="address-bar">/adjudication/factfinding/case/UI-2024-771043</div>
+  </div>
+
+  <!-- TITLE BAND -->
+  <div class="title-band">
+    <h1>Fact-Finding Case File</h1>
+    <div class="case-status"><span class="status-dot"></span>STATUS: OPEN — ADJUDICATOR ACTION REQUIRED</div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- CASE PANEL -->
+    <div class="panel">
+      <div class="panel-header">
+        <span>Case Summary</span>
+        <span>Case ID: UI-2024-771043</span>
+      </div>
+      <div class="panel-body">
+        <table class="data-table">
+          <tr>
+            <td class="label">Claimant Name</td>
+            <td class="value-lg">Raymond Decker</td>
+          </tr>
+          <tr>
+            <td class="label">Employer</td>
+            <td class="value-lg">MedLine Direct (Medical Device Delivery)</td>
+          </tr>
+          <tr>
+            <td class="label">Issue Type</td>
+            <td class="value-lg">Separation — Employer-Initiated (Alleged Misconduct)</td>
+          </tr>
+          <tr>
+            <td class="label">Sub-Issue</td>
+            <td>Separation following refusal / non-completion of required drug test</td>
+          </tr>
+          <tr>
+            <td class="label">Separation Type</td>
+            <td>Employer-initiated (suspension without pay leading to termination)</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- CALL ACTION -->
+    <div class="call-box">
+      <div class="call-box-header">Fact-Finding Interview</div>
+      <div class="call-box-body">
+        <div class="employer-note">⚠ EMPLOYER CONTACTED TWICE — NO RESPONSE — CLAIMANT STATEMENT NEEDED</div>
+        <div class="call-instructions">
+          The employer was contacted on two separate occasions and did not respond.
+          To proceed, conduct a fact-finding interview with the <strong>claimant</strong>
+          to obtain his statement regarding the separation. Click below to place the call.
+          Take notes using the notepad provided.
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTEPAD -->
+    <div class="notepad-box">
+      <div class="notepad-header">Adjudicator Notepad</div>
+      <div class="notepad-body">
+        <textarea class="notepad-area" placeholder="Take notes during the call here..."></textarea>
+        <div class="notepad-hint">Notes are for this session only and are not saved in this prototype.</div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      Prototype demonstration system. All names, employers, and case details are fictional.
+      Not affiliated with any government agency.
+    </div>
+
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span>PROTOTYPE BUILD</span>
+    <span>Case UI-2024-771043</span>
+    <span><span class="status-dot"></span>1 Open Item</span>
+    <span>Fact-Finding Module</span>
+  </div>
+<elevenlabs-convai agent-id="agent_3501khrypzv1f05b0s2xt0396qpy"></elevenlabs-convai><script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+</body>
+</html>
